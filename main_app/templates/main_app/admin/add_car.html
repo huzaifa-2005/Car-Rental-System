@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Car - Admin</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+</head>
+<body style="background-color: #f5f5f5; font-family: Arial, sans-serif;">
+
+    <div style="max-width: 600px; margin: 50px auto; background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        
+        <h2 style="text-align: center; margin-bottom: 20px; color: #212529;">Add New Car</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button type="submit" style="background-color: #007BFF; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;">
+                    Add Car
+                </button>
+            </div>
+        </form>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'admin_dashboard' %}" style="color: #007BFF;">&larr; Back to Dashboard</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
+
+    
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+</head>
+<body style="background-color: #f5f5f5; font-family: Arial, sans-serif;">
+
+    <div> 
+        {% if messages %}
+            {% for message in messages %}
+                {% if "car-can-not-be-removed" in message.tags %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        {% if messages %}
+            {% for message in messages %}
+                {% if "car-removed-successfully" in message.tags %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if messages %}
+            {% for message in messages %}
+                {% if "car-can-not-be-removed" in message.tags %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if messages %}
+            {% for message in messages %}
+                {% if "car-added-successfully" in message.tags %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div style="max-width: 1000px; margin: 50px auto; background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+
+        
+        <h2 style="text-align: center; margin-bottom: 30px; color: #212529;">Administrator Dashboard</h2>
+
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;">
+
+
+            
+
+
+            <!-- Card 1: Total Cars -->
+            <div style="background-color: #E3F2FD; width: 250px; padding: 20px; border-radius: 12px; text-align: center;">
+                <h3 style="color: #007BFF;">Total Cars</h3>
+                <p style="font-size: 24px; font-weight: bold;">{{ total_cars }}</p>
+            </div>
+
+            <!-- Card 2: Total Users -->
+            <div style="background-color: #E3F2FD; width: 250px; padding: 20px; border-radius: 12px; text-align: center;">
+                <h3 style="color: #007BFF;">Total Users</h3>
+                <p style="font-size: 24px; font-weight: bold;">{{ total_users }}</p>
+            </div>
+
+            <!-- Card 3: Active Rentals -->
+            <div style="background-color: #E3F2FD; width: 250px; padding: 20px; border-radius: 12px; text-align: center;">
+                <h3 style="color: #007BFF;">Active Rentals</h3>
+                <p style="font-size: 24px; font-weight: bold;">{{ active_rentals }}</p>
+            </div>
+
+        </div>
+
+
+
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="{% url 'admin_add_car' %}" class="rent-button" style="background-color: darkcyan">Add New Car</a>
+            <a href="{% url 'admin_customer_report' %}" class="rent-button" >Customer Report</a>
+            <a href="{% url 'admin_reserved_cars_report' %}" class="rent-button" >Reserved Cars Report</a>
+            <a href="{% url 'admin_car_list' %}" class="rent-button" style="background-color: darkcyan">Remove Car</a>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{% url 'home' %}" style="color: #007BFF; text-decoration: none;">&larr; Back to Home</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
+
+{% endblock %}

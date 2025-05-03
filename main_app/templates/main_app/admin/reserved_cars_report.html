@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reserved Cars Report - Admin</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+</head>
+<body style="background-color: #f5f5f5; font-family: Arial, sans-serif;">
+
+    <div style="max-width: 1000px; margin: 50px auto; background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+        <h2 style="text-align: center; margin-bottom: 30px; color: #212529;">Reserved Cars Report</h2>
+
+        {% if rentals %}
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background-color: #007BFF; color: white;">
+                    <tr>
+                        <th style="padding: 12px;">Car Name</th>
+                        <th style="padding: 12px;">Reserved By (User)</th>
+                        <th style="padding: 12px;">Start Date</th>
+                        <th style="padding: 12px;">End Date</th>
+                        <th style="padding: 12px;">Total Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rental in rentals %}
+                    <tr style="text-align: center; border-bottom: 1px solid #ddd;">
+                        <td style="padding: 12px;">{{ rental.car.name }}</td>
+                        <td style="padding: 12px;">{{ rental.user.username }}</td>
+                        <td style="padding: 12px;">{{ rental.start_date }}</td>
+                        <td style="padding: 12px;">{{ rental.end_date }}</td>
+                        <td style="padding: 12px;">${{ rental.total_cost }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="{% url 'pdf_reserved_cars_report' %}" class="rent-button" style="background-color: #28a745;">Download PDF</a>
+            </div>
+
+        {% else %}
+            <p style="text-align: center; font-size: 18px; color: #666;">No reserved cars found.</p>
+        {% endif %}
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{% url 'admin_dashboard' %}" style="color: #007BFF; text-decoration: none;">&larr; Back to Dashboard</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
+
+    
+{% endblock %}

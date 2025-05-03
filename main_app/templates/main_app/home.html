@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Rental - Home</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+</head>
+<body style="background-color: #f5f5f5; font-family: Arial, sans-serif;">
+     
+   
+    
+
+    <h1 style="text-align: center; padding: 20px; color: #212529;">Available Cars for Rent</h1>
+
+    <div class="car-grid">
+        {% for car in page_obj %}
+        <div class="car-card {% if not car.available %}unavailable{% endif %}">
+            {% if car.image %}
+                <img src="{{ car.image.url }}" alt="{{ car.name }}" class="car-image">
+            {% else %}
+                <img src="{% static 'images/default_car.png' %}" alt="Default Car" class="car-image">
+            {% endif %}
+            <div class="car-details">
+                <h3>{{ car.name }}</h3>
+                <p><strong>Brand:</strong> {{ car.brand }}</p>
+                <p><strong>Model Year:</strong> {{ car.model_year }}</p>
+                <p><strong>Seats:</strong> {{ car.seating_capacity }}</p>
+                <p><strong>Rent/Day:</strong> ${{ car.rent_per_day }}</p>
+                {% if not car.available %}
+                    <div class="not-available-tag">Not Available</div>
+                {% else %}
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'car_detail' car.id %}" class="rent-button">View Details</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="rent-button">Login to Rent</a>
+                    {% endif %}    
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination controls -->
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="{% url 'car_list' page=page_obj.previous_page_number %}" class="pagination-button">Previous</a>
+        {% endif %}
+
+        <span>Page {{ page_obj.number }} of {{ total_pages }}</span>
+
+        {% if page_obj.has_next %}
+            <a href="{% url 'car_list' page=page_obj.next_page_number %}" class="pagination-button">Next</a>
+        {% endif %}
+    </div>
+
+</body>
+</html>
+
+
+{% endblock %}

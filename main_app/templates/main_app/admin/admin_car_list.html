@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Remove Cars</h2>
+
+    {% if messages %}
+            {% for message in messages %}
+                {% if "car-removed-successfully" in message.tags %}
+                <div class="alert alert-success">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if messages %}
+        {% for message in messages %}
+            {% if "car-can-not-be-removed" in message.tags %}
+            <div class="alert alert-success">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}    
+    <form method="POST" action="{% url 'admin_car_list' %}">
+        {% csrf_token %}
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select-all"></th>
+                    <th>Car Name</th>
+                    <th>Model</th>
+                    <th>Available</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for car in cars %}
+                <tr>
+                    <td><input type="checkbox" name="car_ids" value="{{ car.id }}"></td>
+                    <td>{{ car.name }}</td>
+                    <td>{{ car.model_year }}</td>
+                    <td>{% if car.available %}Available{% else %}Unavailable{% endif %}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4">No cars found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button type="submit" class="btn btn-danger">Remove Selected Cars</button>
+    </form>
+</div>
+<div style="text-align: center; margin-top: 20px;">
+    <a href="{% url 'admin_dashboard' %}" style="color: #007BFF;"><h4>&larr; Back to Dashboard</h4></a>
+</div>
+<script>
+    document.getElementById("select-all").onclick = function() {
+        const checkboxes = document.getElementsByName("car_ids");
+        for (const cb of checkboxes) cb.checked = this.checked;
+    }
+</script>
+{% endblock %}

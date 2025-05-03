@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rental History</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+</head>
+<body style="background-color: #f5f5f5; font-family: Arial, sans-serif;">
+
+    <div style="max-width: 1000px; margin: 50px auto; background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+        <h2 style="text-align: center; margin-bottom: 30px; color: #212529;">My Rental History</h2>
+        {% if messages %}
+            {% for message in messages %}
+                {% if "rental-success" in message.tags %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        {% if rentals %}
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background-color: #007BFF; color: white;">
+                    <tr>
+                        <th style="padding: 12px;">Car Name</th>
+                        <th style="padding: 12px;">Start Date</th>
+                        <th style="padding: 12px;">End Date</th>
+                        <th style="padding: 12px;">Total Cost</th>
+                        <th style="padding: 12px;">Status</th>
+                        <th style="padding: 12px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rental in rentals %}
+                    <tr style="text-align: center; border-bottom: 1px solid #ddd;">
+                        <td style="padding: 12px;">{{ rental.car.name }}</td>
+                        <td style="padding: 12px;">{{ rental.start_date }}</td>
+                        <td style="padding: 12px;">{{ rental.end_date }}</td>
+                        <td style="padding: 12px;">${{ rental.total_cost }}</td>
+                        <td style="padding: 12px;">
+                            {% if rental.is_active %}
+                                <span style="color: green;">Active</span>
+                            {% else %}
+                                <span style="color: gray;">Completed</span>
+                                {% if rental.end_date > today %}
+                                    <div style="color: orange; font-size: 13px;">Returned Early</div>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        <td style="padding: 12px;">
+                            {% if rental.is_active %}
+                            <form method="POST" action="{% url 'return_car' rental.id %}">
+                                {% csrf_token %}
+                                <button type="submit" style="background-color: crimson; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer;">
+                                    Return Now
+                                </button>
+                            </form>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="text-align: center; font-size: 18px; color: #666;">You have no rental history yet.</p>
+        {% endif %}
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{% url 'home' %}" style="color: #007BFF; text-decoration: none;">&larr; Back to Home</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
+{% endblock %}

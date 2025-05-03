@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}AutoFleetX{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+    <style>
+        
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #003049;
+            padding: 12px 30px;
+            color: #ffffff;
+        }
+
+        .navbar .left,
+        .navbar .right {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .left a,
+        .navbar .right a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+            padding: 6px 12px;
+            border-radius: 5px;
+        }
+
+        .navbar .left a:hover,
+        .navbar .right a:hover {
+            background-color: #1d3557;
+        }
+
+        .navbar .middle {
+            flex: 1;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #fca311;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        a.button {
+            background-color: #fca311;
+            color: #003049;
+            padding: 6px 12px;
+            margin-left: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        a.button:hover {
+            background-color: #ffb703;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🔝 NAVBAR -->
+    <div class="navbar">
+        {% if user.is_authenticated %}
+            <div class="left">
+                {% if user.is_superuser %}
+                    <a href="{% url 'profile' %}">🖥️ Admin Profile</a>
+                    <a href="{% url 'admin_dashboard' %}">📈 Admin Dashboard</a>
+                {% else %}
+                    <a href="{% url 'profile' %}">👤︎ Profile</a>
+                    <a href="{% url 'rental_history' %}">🚗 My Rentals</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="left">
+                <a href="{% url 'signup' %}">Sign Up 🔐</a>
+            </div>
+        {% endif %}
+        <!-- Middle: Brand Name -->
+        <div class="middle">
+            AutoFleetX
+        </div>
+
+        <!-- Right section -->
+        <div class="right">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'contact_us' %}">Contact Us</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="button">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Main content block -->
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>

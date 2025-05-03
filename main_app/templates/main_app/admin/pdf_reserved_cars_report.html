@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Active Reserved Cars Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            color: #333;
+        }
+
+        h1, h3 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .summary {
+            text-align: center;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #bbb;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f3f3f3;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Active Reserved Cars Report</h1>
+    <h3>Car Rental System Admin Dashboard</h3>
+
+    <div class="summary">
+        Total Active Reservations: <strong>{{ total_active_reservations }}</strong>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>Car Name</th>
+                <th>Reserved On</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reservation in active_reservations %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ reservation.user.username }}</td>
+                <td>{{ reservation.car.name }}</td>
+                <td>{{ reservation.start_date}}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No active reservations found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        Generated on {{ now|date:"F j, Y, g:i a" }}
+    </div>
+
+</body>
+</html>
