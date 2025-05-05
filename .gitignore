@@ -1,0 +1,15 @@
+# Ignore virtual environment
+venv/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# SQLite database
+db.sqlite3
+
+# Media files (optional)
+media/
+
+# VS Code settings
+.vscode/

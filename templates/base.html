@@ -97,7 +97,9 @@
         <!-- Right section -->
         <div class="right">
             <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'contact_us' %}">Contact Us</a>
+            {% if not user.is_superuser %}  
+                <a href="{% url 'contact_us' %}">Contact Us</a>
+            {% endif %}    
             {% if user.is_authenticated %}
                 <a href="{% url 'logout' %}" class="button">Logout</a>
             {% else %}

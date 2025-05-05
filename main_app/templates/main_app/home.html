@@ -6,12 +6,122 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Car Rental - Home</title>
-    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
-</head>
-<body style="background-color: #f5f5f5; font-family: Arial, sans-serif;">
+    <head>
+        <meta charset="UTF-8">
+        <title>Car Rental - Home</title>
+    
+        <style>
+            body {
+                background-color: #f5f5f5;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+    
+            h1 {
+                text-align: center;
+                padding: 20px;
+                color: #212529;
+            }
+    
+            .car-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 20px;
+                max-width: 1100px;
+                margin: 0 auto 40px;
+                padding: 0 20px;
+            }
+    
+            .car-card {
+                background-color: #fff;
+                border-radius: 12px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+                overflow: hidden;
+                transition: transform 0.2s ease;
+            }
+    
+            .car-card:hover {
+                transform: translateY(-5px);
+            }
+    
+            .car-image {
+                width: 100%;
+                height: 180px;
+                object-fit: cover;
+            }
+    
+            .car-details {
+                padding: 15px 20px;
+                color: #343a40;
+            }
+    
+            .car-details h3 {
+                margin-top: 0;
+                font-size: 20px;
+                color: #007BFF;
+            }
+    
+            .car-details p {
+                margin: 6px 0;
+                font-size: 15px;
+            }
+    
+            .rent-button {
+                display: inline-block;
+                margin-top: 15px;
+                padding: 8px 18px;
+                background-color: #007BFF;
+                color: #fff;
+                border-radius: 6px;
+                text-decoration: none;
+                font-weight: bold;
+                transition: background-color 0.2s ease;
+            }
+    
+            .rent-button:hover {
+                background-color: #0056b3;
+            }
+    
+            .unavailable {
+                opacity: 0.7;
+                filter: grayscale(40%);
+            }
+    
+            .not-available-tag {
+                margin-top: 12px;
+                padding: 6px 10px;
+                background-color: #ccc;
+                border-radius: 4px;
+                text-align: center;
+                color: #333;
+                font-size: 13px;
+                font-weight: 600;
+            }
+    
+            .pagination {
+                text-align: center;
+                margin-bottom: 40px;
+                font-family: 'Segoe UI', sans-serif;
+                font-size: 15px;
+            }
+    
+            .pagination-button {
+                margin: 0 8px;
+                padding: 6px 14px;
+                background-color: #007BFF;
+                color: white;
+                border-radius: 5px;
+                text-decoration: none;
+                font-weight: 500;
+            }
+    
+            .pagination-button:hover {
+                background-color: #0056b3;
+            }
+        </style>
+    </head>
+    
      
    
     
