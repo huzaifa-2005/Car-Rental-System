@@ -5,14 +5,31 @@ from django.utils import timezone
 import datetime
 # MinValueValidator--Used to make sure numeric fields (like balance) are not negative
 
+# __str__ is a Special Python method that defines the string representation of an object
 
+'''Here in Django, by ORM (Object-Relational Mapping), it is meant that is a technique
+        that Django uses to interact with your database,  
+        allowing you to work with your database using Python objects rather than writing raw 
+        SQL queries. '''
 
-#  Abstract base class for shared timestamps
+''' Here in django, Abstract base classes serve by allowing us to 
+put some common information into a number of other models. '''
+
+'''Abstract classes in Django focus on preventing table creation and allow sharing common fields--as done in this case with created_at field.'''
+''' Meta class is like a settings panel or configuration handler specifically for each model. 
+It's where we tell Django special instructions about how to treat the entire model in the database and throughout the framework.  ''' 
+
+''' "Meta" is not a keyword but its a conventional name to represent the metadata of the model.
+Its purpose is to give you a place to specify model-wide settings 
+without cluttering up the main model definition with non-field related configurations. '''
+
+# This is our abstract class that we have defined
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         abstract = True
+    # The abstract = True in Meta tells Django not to create a database table--keeping the model abstract.    
 
 
 class CustomUser(AbstractUser):
@@ -103,6 +120,12 @@ class Rental(TimeStampedModel):
     # cls = Rental (the class itself)
     def check_returns(cls):
         today = timezone.now().date()
+        
+        # in Django you cannot use the simple Python <= operator inside a filter() call
+        # Django ORM does not parse native Python comparison operators (<, <=, etc.) in queries.
+        #  Instead, Django uses "field lookups"
+        # "field lookups" are special keywords connected with __ (double underscore) to perform comparisons in SQL.
+        # __lte is lookup type for "less than or equal to"
         completed_rentals = cls.objects.filter(end_date__lte=today, is_active=True)
         for rental in completed_rentals:
             rental.is_active = False

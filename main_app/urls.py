@@ -19,6 +19,7 @@ urlpatterns = [
     # User account URLs
     path('profile/', views.profile_view, name='profile'),
     path('rental-history/', views.rental_history_view, name='rental_history'),
+    path('transactions/', views.transaction_history, name='transaction_history'),
     path('contact/', views.contact_us, name='contact_us'),
 
     # Admin URLs

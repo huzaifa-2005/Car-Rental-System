@@ -136,16 +136,24 @@
         </div>
 
         {% if car.available %}
-        <form method="POST" action="{% url 'rent_car' car.id %}">
-            {% csrf_token %}
-            <div style="text-align: center;">
-                <label for="days">Number of Days:</label>
-                <input type="number" name="days" min="1" required>
-            </div>
-            <div style="text-align: center;">
-                <button type="submit" class="rent-button">Rent This Car</button>
-            </div>
-        </form>
+            {% if not user.is_superuser %}
+                <form method="POST" action="{% url 'rent_car' car.id %}">
+                    {% csrf_token %}
+                    <div style="text-align: center; margin-top: 20px;">
+                        <label for="days" style="color: black; font-weight: bold;">Number of Days:</label>
+                        <input type="number" name="days" id="daysInput" min="1" required>
+                    </div>
+                    
+                    <!-- Total cost shown here -->
+                    <div id="costDisplay" style="text-align: center; margin-top: 10px; font-weight: bold; color: #007BFF;"></div>
+                    
+
+                    <div style="text-align: center;">
+                            <button type="submit" class="rent-button">Rent This Car</button>
+                    </div>
+                    
+                </form>
+            {% endif %}  
         {% else %}
         <div style="text-align: center; margin-top: 20px;">
             <p style="color: #dc3545; font-weight: bold;">This car is currently not available for rent.</p>
@@ -156,7 +164,24 @@
             <a href="{% url 'home' %}">&larr; Back to Home</a>
         </div>
     </div>
+    <script>
+        const rentPerDay = {{ car.rent_per_day }};
+        const daysInput = document.getElementById('daysInput');
+        const costDisplay = document.getElementById('costDisplay');
+    
+        daysInput.addEventListener('input', () => {
+            const days = parseInt(daysInput.value);
+            if (!isNaN(days) && days > 0) {
+                const totalCost = rentPerDay * days;
+                costDisplay.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
+            } else {
+                costDisplay.textContent = "";
+            }
+        });
+    </script>
+     
 </body>
+
 </html>
 
 {% endblock %}

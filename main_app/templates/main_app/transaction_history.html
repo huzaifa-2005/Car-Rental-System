@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}Transaction History{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .transaction-table th, .transaction-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .transaction-table th {
+            background-color: #003049;
+            color: white;
+        }
+
+        .transaction-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .history-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #003049;
+        }
+
+        .no-transactions {
+            text-align: center;
+            color: #777;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="history-container">
+    <h2>Your Transaction History</h2>
+
+    {% if transactions %}
+    <table class="transaction-table">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tx in transactions %}
+            <tr>
+                <td>{{ tx.get_transaction_type_display }}</td>
+                <td>${{ tx.amount }}</td>
+                <td>{{ tx.description }}</td>
+                <td>{{ tx.created_at|date:"M d, Y H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p class="no-transactions">You have no transaction history yet.</p>
+    {% endif %}
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{% url 'home' %}" style="color: #007BFF; text-decoration: none;">&larr; Back to Home</a>
+    </div>
+</div>
+
+</body>
+</html>
+{% endblock %}

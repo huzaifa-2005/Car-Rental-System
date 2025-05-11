@@ -47,8 +47,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                next_url = request.GET.get('next', 'home')
-                return redirect(next_url)
+                return redirect('home')
             else:
                 messages.error(request, 'Invalid username or password')
     else:
@@ -147,7 +146,7 @@ def rent_car(request, car_id):
             description=f'Rented {car.name} for {days} day(s)'
         )
 
-        messages.success(request, f'You successfully rented {car.name} for {days} day(s).',extra_tags="rental-success")
+        messages.success(request, f'You have successfully rented {car.name} for {days} day(s).',extra_tags="rental-success")
         return redirect('rental_history')
 
         
@@ -296,6 +295,11 @@ def rental_history_view(request):
         'rentals': rentals,
         'today': today
     })
+
+@login_required
+def transaction_history(request):
+    transactions = Transaction.objects.filter(user=request.user).order_by('-created_at') # this minus sign before "created_at" will sort the transactions in descending order
+    return render(request, 'main_app/transaction_history.html', {'transactions': transactions})
 
 
 
