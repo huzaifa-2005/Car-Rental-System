@@ -165,12 +165,12 @@ def car_detail_view(request, car_id):
         if form.is_valid():
             start_date = form.cleaned_data['start_date']
             end_date = form.cleaned_data['end_date']
-            pin_code = form.cleaned_data['pin_code']
+            # pin_code = form.cleaned_data['pin_code']
             
-            # Validate PIN code
-            if pin_code != request.user.pin_code:
-                messages.error(request, 'Invalid PIN code')
-                return redirect('car_detail', car_id=car.id)
+            # # Validate PIN code
+            # if pin_code != request.user.pin_code:
+            #     messages.error(request, 'Invalid PIN code')
+            #     return redirect('car_detail', car_id=car.id)
             
             # Check if user already has an active rental
             if Rental.objects.filter(user=request.user, is_active=True).exists():
