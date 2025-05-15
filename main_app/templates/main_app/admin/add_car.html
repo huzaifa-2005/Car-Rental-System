@@ -11,6 +11,26 @@
     <meta charset="UTF-8">
     <title>Add New Car - Admin</title>
     <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+    <style>
+        form p {
+        margin-bottom: 15px;
+    }
+    
+    form label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 6px;
+        color: #333333;
+        font-size: 14px;
+    }
+    form input:focus,
+    form select:focus,
+    form textarea:focus {
+        border-color: #007BFF;
+        outline: none;
+    }
+    </style>
+
 </head>
 <body style="background-color: #f5f5f5; font-family: Arial, sans-serif;">
 
@@ -19,6 +39,9 @@
         <h2 style="text-align: center; margin-bottom: 20px; color: #212529;">Add New Car</h2>
 
         <form method="POST" enctype="multipart/form-data">
+            <!-- enctype="multipart/form-data" allows file uploads by : -->
+            <!-- Splitting form data into multiple parts (text + binary).  -->
+             <!-- Using boundaries to separate different fields and files.  -->
             {% csrf_token %}
             {{ form.as_p }}
 

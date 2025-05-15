@@ -13,7 +13,8 @@ import io
 from xhtml2pdf import pisa
 from django.urls import reverse
 from .models import CustomUser, Car, Rental, Transaction, ContactMessage
-from .forms import CustomUserCreationForm, CustomUserLoginForm, RentalForm, AddBalanceForm, AdminCarForm
+from .forms import CustomUserCreationForm, CustomUserLoginForm, AddBalanceForm, AdminCarForm
+# from .forms import RentalForm
 from datetime import date, timedelta
 from django.shortcuts import get_object_or_404, redirect
 # from .utils import render_to_pdf
@@ -100,7 +101,7 @@ def rent_car(request, car_id):
                 messages.error(request, 'You already have an active rental',extra_tags="rental-already-active")
                 return redirect('car_detail', car_id=car.id)
     # even we have marked the unavailable cars as disbale to rent in the home view
-    # but since backend must always validate the state, therefore we check again
+    # but since backend must always validate the state, therefore we check again 
     if not car.available:
         messages.error(request, "This car is not available for rent.",extra_tags="rental-not-available")
         return redirect('car_detail', car_id=car.id)
@@ -110,7 +111,7 @@ def rent_car(request, car_id):
             days = int(request.POST.get('days'))
             if days < 1:
                 messages.error(request, "Rental duration must be at least 1 day.",extra_tags="rental-duration-error")
-                return redirect('car_detail', car_id=car.id)
+                return redirect('car_detail', car_id=car.id) 
         except (TypeError, ValueError):
             messages.error(request, "Invalid number of days.",extra_tags="invalid-days-error")
             return redirect('car_detail', car_id=car.id)
@@ -159,79 +160,73 @@ def car_detail_view(request, car_id):
     """Detail view for a specific car"""
     car = get_object_or_404(Car, id=car_id)
     
-    # Handle rental form submission
-    if request.method == 'POST':
-        form = RentalForm(request.POST)
-        if form.is_valid():
-            start_date = form.cleaned_data['start_date']
-            end_date = form.cleaned_data['end_date']
-            # pin_code = form.cleaned_data['pin_code']
+    # # Handle rental form submission
+    # if request.method == 'POST':
+    #     form = RentalForm(request.POST)
+    #     if form.is_valid():
+    #         start_date = form.cleaned_data['start_date']
+    #         end_date = form.cleaned_data['end_date']
             
-            # # Validate PIN code
-            # if pin_code != request.user.pin_code:
-            #     messages.error(request, 'Invalid PIN code')
-            #     return redirect('car_detail', car_id=car.id)
             
-            # Check if user already has an active rental
-            if Rental.objects.filter(user=request.user, is_active=True).exists():
-                messages.error(request, 'You already have an active rental')
-                return redirect('car_detail', car_id=car.id)
+    #         # Check if user already has an active rental
+    #         if Rental.objects.filter(user=request.user, is_active=True).exists():
+    #             messages.error(request, 'You already have an active rental')
+    #             return redirect('car_detail', car_id=car.id)
             
-            # Check if car is available
-            if not car.available:
-                messages.error(request, 'This car is no longer available')
-                return redirect('car_detail', car_id=car.id)
+    #         # Check if car is available
+    #         if not car.available:
+    #             messages.error(request, 'This car is no longer available')
+    #             return redirect('car_detail', car_id=car.id)
             
-            # Calculate rental costz
-            days = (end_date - start_date).days + 1
-            total_cost = car.rent_per_day * days
+    #         # Calculate rental costz
+    #         days = (end_date - start_date).days + 1
+    #         total_cost = car.rent_per_day * days
             
-            # Check if user has sufficient balance
-            if request.user.balance < total_cost:
-                messages.error(request, f'Insufficient balance. You need ${total_cost}')
-                return redirect('car_detail', car_id=car.id)
+    #         # Check if user has sufficient balance
+    #         if request.user.balance < total_cost:
+    #             messages.error(request, f'Insufficient balance. You need ${total_cost}')
+    #             return redirect('car_detail', car_id=car.id)
             
-            # Process rental
-            try:
-                # Create rental record
-                rental = Rental.objects.create(
-                    user=request.user,
-                    car=car,
-                    start_date=start_date,
-                    end_date=end_date,
-                    total_cost=total_cost,
-                    is_active=True
-                )
+    #         # Process rental
+    #         try:
+    #             # Create rental record
+    #             rental = Rental.objects.create(
+    #                 user=request.user,
+    #                 car=car,
+    #                 start_date=start_date,
+    #                 end_date=end_date,
+    #                 total_cost=total_cost,
+    #                 is_active=True
+    #             )
                 
-                # Update user balance
-                request.user.balance -= total_cost
-                request.user.save()
+    #             # Update user balance
+    #             request.user.balance -= total_cost
+    #             request.user.save()
                 
-                # Record transaction
-                Transaction.objects.create(
-                    user=request.user,
-                    amount=total_cost,
-                    transaction_type='PAYMENT',
-                    description=f'Rental of {car.name} from {start_date} to {end_date}'
-                )
+    #             # Record transaction
+    #             Transaction.objects.create(
+    #                 user=request.user,
+    #                 amount=total_cost,
+    #                 transaction_type='PAYMENT',
+    #                 description=f'Rental of {car.name} from {start_date} to {end_date}'
+    #             )
                 
-                # Mark car as unavailable
-                car.mark_unavailable()
+    #             # Mark car as unavailable
+    #             car.mark_unavailable()
                 
-                messages.success(request, 'Car rented successfully!')
-                return redirect('rental_history')
-            except Exception as e:
-                messages.error(request, f'Error processing rental: {str(e)}')
-                return redirect('car_detail', car_id=car.id)
-    else:
+    #             messages.success(request, 'Car rented successfully!')
+    #             return redirect('rental_history')
+    #         except Exception as e:
+    #             messages.error(request, f'Error processing rental: {str(e)}')
+    #             return redirect('car_detail', car_id=car.id)
+    # else:
         # Set default rental dates (today and tomorrow)
-        today = timezone.now().date()
-        tomorrow = today + datetime.timedelta(days=1)
-        form = RentalForm(initial={'start_date': today, 'end_date': tomorrow})
+    # today = timezone.now().date()
+    # tomorrow = today + datetime.timedelta(days=1)
+    # form = RentalForm(initial={'start_date': today, 'end_date': tomorrow})
     
     context = {
         'car': car,
-        'form': form
     }
     return render(request, 'main_app/car_detail.html', context)
 
@@ -301,8 +296,33 @@ def transaction_history(request):
     transactions = Transaction.objects.filter(user=request.user).order_by('-created_at') # this minus sign before "created_at" will sort the transactions in descending order
     return render(request, 'main_app/transaction_history.html', {'transactions': transactions})
 
+# Contact Us View
+def contact_us(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+        if not name or not email or not message:
+            return render(request, 'main_app/contact_us.html', {
+                'error': "All fields are required."
+            })
+
+        # Save message
+        ContactMessage.objects.create(name=name, email=email, message=message)
+
+        # Simple redirect with query param
+        
+        return redirect(reverse('contact_us') + '?success=true')
+    return render(request, 'main_app/contact_us.html')
 
 
+
+
+
+
+# Till here the 12 views are for the normal users
+# and the below views are for the admin users
 
 
 
@@ -378,8 +398,11 @@ def pdf_customer_report(request):
 
 def render_to_pdf(template_src, context_dict):
     """Helper function to generate PDF from HTML template"""
+    # render_to_string : A Django shortcut that loads a template and renders it as a plain string (HTML string).
     template = render_to_string(template_src, context_dict)
+    # io.BytesIO(): here below, initially you just instantiated a Python object that acts like a file in memory . It temporarily holds the PDF content.
     result = io.BytesIO()
+    # result: This will store the final binary PDF data.
     pdf = pisa.pisaDocument(io.BytesIO(template.encode("UTF-8")), result)
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
@@ -418,7 +441,8 @@ def admin_add_car(request):
     """Admin view to add a new car using Django Form (with image upload)"""
     if request.method == 'POST':
         form = AdminCarForm(request.POST, request.FILES)  # handle text + file uploads
-        if form.is_valid():
+        if form.is_valid(): # check if the form is valid
+            # .is_valid() checks model field requirements
             form.save()
             messages.success(request, 'Car added successfully!',extra_tags="car-added-successfully")
             return redirect('admin_dashboard')
@@ -435,7 +459,7 @@ def admin_add_car(request):
 # POST--to delete selected cars
 @login_required
 @user_passes_test(is_admin)
-def admin_car_list(request):
+def admin_car_list(request):   # for deleting cars from the website
     if request.method == 'POST':
         car_ids = request.POST.getlist('car_ids')
         deleted_count = 0
@@ -454,24 +478,4 @@ def admin_car_list(request):
 
     cars = Car.objects.all()
     return render(request, 'main_app/admin/admin_car_list.html', {'cars': cars})
-
-# Contact Us View
-def contact_us(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        message = request.POST.get('message')
-
-        if not name or not email or not message:
-            return render(request, 'main_app/contact_us.html', {
-                'error': "All fields are required."
-            })
-
-        # Save message
-        ContactMessage.objects.create(name=name, email=email, message=message)
-
-        # Simple redirect with query param
-        
-        return redirect(reverse('contact_us') + '?success=true')
-    return render(request, 'main_app/contact_us.html')
 

@@ -65,7 +65,7 @@ class Car(models.Model):
     rent_per_day = models.DecimalField(max_digits=8, decimal_places=2, null=False, blank=False)
     model_year = models.PositiveIntegerField(null=True, blank=True)
     available = models.BooleanField(default=True)
-    image = models.ImageField(upload_to='car_images/', default='static/images/default.jpg')
+    image = models.ImageField(upload_to='car_images/', default='media/car_images/default.jpg')
 
     def __str__(self):
         return f"{self.name} - {self.brand}"
