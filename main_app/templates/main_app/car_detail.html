@@ -111,14 +111,22 @@
 </head>
 
 <body>
-    <div class="container">
-        {% for message in messages %}
-            {% if "invalid-days-error" in message.tags or "rental-insufficient-balance" in message.tags or "rental-duration-error" in message.tags %}
+    <div>{% for message in messages %}
+            {% if "invalid-days-error" in message.tags %}
                 <div class="alert alert-danger">{{ message }}</div>
             {% elif "rental-already-active" in message.tags %}
                 <div class="alert alert-success">{{ message }}</div>
+            {% elif "rental-insufficient-balance" in message.tags %}
+                <div class="alert alert-success">{{ message }}</div>    
+            {% elif "rental-duration-error" in message.tags %}
+                <div class="alert alert-success">{{ message }}</div>          
+            {% elif "rental-not-available" in message.tags %}
+                <div class="alert alert-success">{{ message }}</div>  
             {% endif %}
         {% endfor %}
+    </div>
+    <div class="container">   
+        
 
         {% if car.image %}
             <img src="{{ car.image.url }}" alt="{{ car.name }}" class="car-image">
