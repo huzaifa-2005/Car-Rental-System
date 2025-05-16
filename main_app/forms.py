@@ -29,35 +29,8 @@ class CustomUserCreationForm(UserCreationForm):  # for signup_view
     
 class CustomUserLoginForm(forms.Form):   # for login_view
     username = forms.CharField(max_length=150)
-    password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(widget=forms.PasswordInput)  # to make password field hidden
 
-# class RentalForm(forms.Form):  # for car_detail_view
-    # start_date = forms.DateField(
-    #     widget=forms.DateInput(attrs={'type': 'date'}),
-    #     initial=timezone.now().date()
-    # )
-    # end_date = forms.DateField(
-    #     widget=forms.DateInput(attrs={'type': 'date'}),
-    #     initial=timezone.now().date() + timezone.timedelta(days=1)
-    # )
-   
-    
-    # def clean(self):
-    #     cleaned_data = super().clean()
-    #     start_date = cleaned_data.get('start_date')
-    #     end_date = cleaned_data.get('end_date')
-        
-    #     if start_date and end_date:
-    #         # Ensure start date is not in the past
-    #         today = timezone.now().date()
-    #         if start_date < today:
-    #             raise forms.ValidationError('Start date cannot be in the past')
-            
-    #         # Ensure end date is not before start date
-    #         if end_date < start_date:
-    #             raise forms.ValidationError('End date must be after start date')
-        
-    #     return cleaned_data
 
 class AddBalanceForm(forms.Form):  # for profile_view (when user wants to add balance)
     amount = forms.DecimalField(

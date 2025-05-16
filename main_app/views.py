@@ -4,20 +4,16 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.utils import timezone
-from django.db.models import Q
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from django.views.decorators.http import require_POST
 import datetime
 import io
 from xhtml2pdf import pisa
 from django.urls import reverse
 from .models import CustomUser, Car, Rental, Transaction, ContactMessage
 from .forms import CustomUserCreationForm, CustomUserLoginForm, AddBalanceForm, AdminCarForm
-# from .forms import RentalForm
 from datetime import date, timedelta
 from django.shortcuts import get_object_or_404, redirect
-# from .utils import render_to_pdf
 
 
 def is_admin(user):
@@ -159,72 +155,7 @@ def rent_car(request, car_id):
 def car_detail_view(request, car_id):
     """Detail view for a specific car"""
     car = get_object_or_404(Car, id=car_id)
-    
-    # # Handle rental form submission
-    # if request.method == 'POST':
-    #     form = RentalForm(request.POST)
-    #     if form.is_valid():
-    #         start_date = form.cleaned_data['start_date']
-    #         end_date = form.cleaned_data['end_date']
-            
-            
-    #         # Check if user already has an active rental
-    #         if Rental.objects.filter(user=request.user, is_active=True).exists():
-    #             messages.error(request, 'You already have an active rental')
-    #             return redirect('car_detail', car_id=car.id)
-            
-    #         # Check if car is available
-    #         if not car.available:
-    #             messages.error(request, 'This car is no longer available')
-    #             return redirect('car_detail', car_id=car.id)
-            
-    #         # Calculate rental costz
-    #         days = (end_date - start_date).days + 1
-    #         total_cost = car.rent_per_day * days
-            
-    #         # Check if user has sufficient balance
-    #         if request.user.balance < total_cost:
-    #             messages.error(request, f'Insufficient balance. You need ${total_cost}')
-    #             return redirect('car_detail', car_id=car.id)
-            
-    #         # Process rental
-    #         try:
-    #             # Create rental record
-    #             rental = Rental.objects.create(
-    #                 user=request.user,
-    #                 car=car,
-    #                 start_date=start_date,
-    #                 end_date=end_date,
-    #                 total_cost=total_cost,
-    #                 is_active=True
-    #             )
-                
-    #             # Update user balance
-    #             request.user.balance -= total_cost
-    #             request.user.save()
-                
-    #             # Record transaction
-    #             Transaction.objects.create(
-    #                 user=request.user,
-    #                 amount=total_cost,
-    #                 transaction_type='PAYMENT',
-    #                 description=f'Rental of {car.name} from {start_date} to {end_date}'
-    #             )
-                
-    #             # Mark car as unavailable
-    #             car.mark_unavailable()
-                
-    #             messages.success(request, 'Car rented successfully!')
-    #             return redirect('rental_history')
-    #         except Exception as e:
-    #             messages.error(request, f'Error processing rental: {str(e)}')
-    #             return redirect('car_detail', car_id=car.id)
-    # else:
-        # Set default rental dates (today and tomorrow)
-    # today = timezone.now().date()
-    # tomorrow = today + datetime.timedelta(days=1)
-    # form = RentalForm(initial={'start_date': today, 'end_date': tomorrow})
-    
+   
     context = {
         'car': car,
     }
@@ -321,14 +252,29 @@ def contact_us(request):
 
 
 
-# Till here the 12 views are for the normal users
-# and the below views are for the admin users
+# Till here we had 13 views--  for the normal users and for checking the admin 
+ 
+
+
+# NOW FOR PDF GENERATION
+def render_to_pdf(template_src, context_dict):
+    """Helper function to generate PDF from HTML template"""
+    # render_to_string : A Django shortcut that loads a template and renders it as a plain string (HTML string).
+    template = render_to_string(template_src, context_dict)
+    # io.BytesIO(): here below, initially you just instantiated a Python object that acts like a file in memory . It temporarily holds the PDF content.
+    result = io.BytesIO()
+    # result: This will store the final binary PDF data.
+    pdf = pisa.pisaDocument(io.BytesIO(template.encode("UTF-8")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return HttpResponse('Error generating PDF', status=400)
 
 
 
 
 
-# Now the admin views start here
+# Now, below are the views for the admins
+
 
 
 
@@ -396,17 +342,7 @@ def pdf_customer_report(request):
     
     return render_to_pdf('main_app/admin/pdf_customer_report.html', context)
 
-def render_to_pdf(template_src, context_dict):
-    """Helper function to generate PDF from HTML template"""
-    # render_to_string : A Django shortcut that loads a template and renders it as a plain string (HTML string).
-    template = render_to_string(template_src, context_dict)
-    # io.BytesIO(): here below, initially you just instantiated a Python object that acts like a file in memory . It temporarily holds the PDF content.
-    result = io.BytesIO()
-    # result: This will store the final binary PDF data.
-    pdf = pisa.pisaDocument(io.BytesIO(template.encode("UTF-8")), result)
-    if not pdf.err:
-        return HttpResponse(result.getvalue(), content_type='application/pdf')
-    return HttpResponse('Error generating PDF', status=400)
+
 
 @login_required
 @user_passes_test(is_admin)
