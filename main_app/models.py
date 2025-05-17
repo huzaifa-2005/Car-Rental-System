@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 from django.utils import timezone
-import datetime
+import datetime 
 # MinValueValidator--Used to make sure numeric fields (like balance) are not negative
 
 # __str__ is a Special Python method that defines the string representation of an object
@@ -87,22 +87,29 @@ class Car(models.Model):
 class Rental(TimeStampedModel):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='rentals')
     car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='rentals')
-    start_date = models.DateField()
-    end_date = models.DateField()
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
     total_cost = models.DecimalField(max_digits=10, decimal_places=2)
     is_active = models.BooleanField(default=True)
+    returned_early = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username} - {self.car.name} ({self.start_date} to {self.end_date})"
     
     def calculate_days(self):
         delta = self.end_date - self.start_date
-        return delta.days + 1
+        return delta.days
     
     def calculate_cost(self):
         days = self.calculate_days()
         return days * self.car.rent_per_day
-    
+    # since we can't predict the future use, we always include the argument *args, **kwargs
+    # to allow for any additional arguments that might be passed inside the save() method.
+    # This method is called when the object is saved to the database.
+
+    ''' we are setting values inside the view and then tweaking one value (e.g. total_cost ) 
+    inside custom save present in the model if incase total_cost is not set in the view
+    and then the Parent save handles the actual database write for all fields '''
     def save(self, *args, **kwargs):
         if not self.total_cost:
             self.total_cost = self.calculate_cost()
@@ -119,14 +126,15 @@ class Rental(TimeStampedModel):
     # and perform operations on the entire model (like querying the database).
     # cls = Rental (the class itself)
     def check_returns(cls):
-        today = timezone.now().date()
+        now = timezone.now()
+
         
         # in Django you cannot use the simple Python <= operator inside a filter() call
         # Django ORM does not parse native Python comparison operators (<, <=, etc.) in queries.
         #  Instead, Django uses "field lookups"
         # "field lookups" are special keywords connected with __ (double underscore) to perform comparisons in SQL.
         # __lte is lookup type for "less than or equal to"
-        completed_rentals = cls.objects.filter(end_date__lte=today, is_active=True)
+        completed_rentals = cls.objects.filter(end_date__lte=now, is_active=True)
         for rental in completed_rentals:
             rental.is_active = False
             rental.save()

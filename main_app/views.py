@@ -12,7 +12,7 @@ from xhtml2pdf import pisa
 from django.urls import reverse
 from .models import CustomUser, Car, Rental, Transaction, ContactMessage
 from .forms import CustomUserCreationForm, CustomUserLoginForm, AddBalanceForm, AdminCarForm
-from datetime import date, timedelta
+from datetime import datetime, timedelta
 from django.shortcuts import get_object_or_404, redirect
 
 
@@ -113,8 +113,8 @@ def rent_car(request, car_id):
             return redirect('car_detail', car_id=car.id)
         
         user = request.user
-        start_date = date.today()
-        end_date = start_date + timedelta(days=days - 1)
+        start_date = datetime.now()
+        end_date = start_date + timedelta(days=days)
         total_cost = car.rent_per_day * days
 
         if not user.has_sufficient_balance(total_cost):
@@ -172,6 +172,7 @@ def return_car(request, rental_id):
         return redirect('profile',extra_tags="already-completed-rental")
 
     rental.is_active = False
+    rental.returned_early = True
     rental.save()
 
     rental.car.mark_available()
@@ -216,7 +217,7 @@ def profile_view(request):
 @login_required
 def rental_history_view(request):
     rentals = Rental.objects.filter(user=request.user).order_by('-created_at')
-    today = timezone.now().date()
+    today = timezone.now()
     return render(request, 'main_app/rental_history.html', {
         'rentals': rentals,
         'today': today

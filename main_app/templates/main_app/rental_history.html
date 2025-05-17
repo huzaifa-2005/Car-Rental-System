@@ -32,7 +32,7 @@
                         <th style="padding: 12px;">Car Name</th>
                         <th style="padding: 12px;">Start Date</th>
                         <th style="padding: 12px;">End Date</th>
-                        <th style="padding: 12px;">Total Cost</th>
+                        <th style="padding: 12px;">Amount Paid</th>
                         <th style="padding: 12px;">Status</th>
                         <th style="padding: 12px;">Action</th>
                     </tr>
@@ -49,6 +49,9 @@
                                 <span style="color: green;">Active</span>
                             {% else %}
                                 <span style="color: gray;">Completed</span>
+                                {% if rental.returned_early %}
+                                    <div style="color: orange; font-size: 13px;">Returned Early</div>
+                                {% endif %}
                             {% endif %}
                         </td>
                         <td style="padding: 12px;">

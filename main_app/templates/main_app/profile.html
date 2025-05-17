@@ -15,9 +15,27 @@
 <body style="background-color: #f5f5f5; font-family: Arial, sans-serif;">
 
     <div style="max-width: 600px; margin: 50px auto; background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-        
-        <h2 style="text-align: center; margin-bottom: 20px; color: #212529;">My Profile</h2>
+        {% if user.is_superuser %} 
+                <h2 style="text-align: center; margin-bottom: 20px; color: #212529;">Admin Profile</h2>
+        {% else %} 
+                <h2 style="text-align: center; margin-bottom: 20px; color: #212529;">My Profile</h2>
+        {% endif %} 
 
+        {% if messages %}
+            {% for message in messages %}
+                {% if "rental-success" in message.tags %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        {% if messages %}
+            {% for message in messages %}
+                {% if "rental-returned" in message.tags %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
         {% if messages %}
             {% for message in messages %}
                 {% if "returned-by-user" in message.tags %}
@@ -61,11 +79,16 @@
          
 
         <div style="margin-bottom: 20px;">
-            <pre><big><strong>Username:</strong></big>   <big>{{ user.username }}</big></pre>
+          {% if user.is_superuser %}  
+            <pre><big><strong>Admin   :</strong></big>   <big>{{ user.username }}</big></pre>
+            <pre><big><strong>Balance :</strong></big>    <big>${{ user.balance }}</big></pre>
+          {% else %}
+            <pre><big><strong>Username:</strong></big>   <big>{{ user.username }}</big></pre>  
             <pre><big><strong>First Name:</strong></big> <big>{{ user.first_name }}</big></pre>
             <pre><big><strong>Last Name:</strong></big>  <big>{{ user.last_name }}</big></pre>
-            <pre><big><strong>Address:</strong></big>    <div style="margin-left: 100px;"><big>{{ user.address }}</big></div></pre>
+            <pre><big><strong>Address:</strong></big>    <big>{{ user.address }}</big></pre>
             <pre><big><strong>Balance:</strong></big>    <big>${{ user.balance }}</big></pre>
+          {% endif %}  
         </div>
 
         
