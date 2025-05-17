@@ -49,9 +49,6 @@
                                 <span style="color: green;">Active</span>
                             {% else %}
                                 <span style="color: gray;">Completed</span>
-                                {% if rental.end_date > today %}
-                                    <div style="color: orange; font-size: 13px;">Returned Early</div>
-                                {% endif %}
                             {% endif %}
                         </td>
                         <td style="padding: 12px;">
