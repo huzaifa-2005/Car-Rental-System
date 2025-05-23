@@ -122,7 +122,7 @@ Car_Rental_System/
 <p align="center">
  🔹Admin Dashboard
 </p>
-<img src="static\screenshots\user rental history.png">  
+<img src="static\screenshots\admin dash.png">  
 </td>
 </table>
 
