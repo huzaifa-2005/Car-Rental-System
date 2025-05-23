@@ -104,18 +104,48 @@ Car_Rental_System/
    ```
 
 ---
-## 📸 Screenshots
-### 🔹Landing Page Preview For Authenticated Users 
-<img src="static\screenshots\logged in user's home page.png" width="800" height="680">
 
-### 🔹Admin Dashboard Preview  
-<img src="static\screenshots\admin dash.png" width="800" >
+### App Preview :
 
-### 🔹Rental History Preview 
-<img src="static\screenshots\user rental history.png" width="800" >
+<table width="100%"> 
+<tr>
+<td width="50%">      
+&nbsp; 
+<br>
+<p align="center">
+   🔹Landing Page For Authenticated Users  
+</p>
+<img src="static\screenshots\logged in user's home page.png" height=290px width=500px >
+</td> 
+<td width="50%">
+<br>
+<p align="center">
+ 🔹Admin Dashboard
+</p>
+<img src="static\screenshots\user rental history.png">  
+</td>
+</table>
 
-### 🔹 User Profile Preview  
-<img src="static\screenshots\user profile page.png" width="800" >
+<table width="100%"> 
+<tr>
+<td width="50%">      
+&nbsp; 
+<br>
+<p align="center">
+   🔹 User Profile  
+</p>
+<img  src="static\screenshots\user profile page.png">
+</td> 
+<td width="50%">
+<br>
+<p align="center">
+ 🔹Rental History
+</p>
+<img src="static\screenshots\user rental history.png">  
+</td>
+</table>
+
+
 
 ---
 
