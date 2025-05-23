@@ -1,170 +1,141 @@
-================================
-Car Rental System - OOP Project
-===============================
+# 🚗 AutoFleetX – Online Car Rental System
 
-Overview:
----------
-This is a Django-based Online Car Rental System developed as a complex engineering project (CEP) for the Object-Oriented Programming (OOP) course. The system implements Python's OOP principles such as inheritance, composition, method overriding, exception handling, and abstract classes.
+AutoFleetX is a Django-based full-stack web application designed to manage car rentals online. It provides separate interfaces for **admin** and **authenticated users**, allows secure transactions, and supports dynamic rental pricing and rental history tracking. This project demonstrates robust use of **Python OOP principles**, Django's powerful **ORM**, and clean, user-friendly frontend design.
 
-The system allows users to:
-- Sign up, log in, and rent available cars.
-- Return rented cars early with no compensation.
-- View rental and transaction histories.
-- Admins can add/remove cars and generate PDF reports.
+---
 
-Technologies Used:
-------------------
-- Python 3
-- Django 5.2
-- HTML/CSS
-- SQLite (default database)
-- xhtml2pdf (for PDF report generation)
+## 🧠 Project Highlights
 
-Project Structure:
-------------------
+- 🔐 **Custom Authentication System** with login/signup.
+- 🧑‍💼 **Role-based views**: separate UI/UX for Admin and Normal Users.
+- 💸 **Wallet System** for users to add money and pay for rentals.
+- 🧾 **Rental History** with "Return Now" and "Returned Early" tracking.
+- 📊 **Transaction History Page** for all payments and balance top-ups.
+- 🧠 **Dynamic Rental Pricing**: live calculation shown on the UI using JavaScript.
+- 🛠️ **Admin Restrictions**:
+  - Cannot rent cars.
+  - Cannot view Contact Us.
+- 💬 **Contact Form** for users to submit queries (not visible to admin).
+- 📅 **Rental Expiry Checker**: Cars are automatically marked available again if the rental period expires.
+- 🧰 **Exception Handling**, **Abstract Classes**, **Composition**, **Inheritance**, and **OOP principles** implemented extensively.
+- 🎨 Clean and responsive UI using custom CSS and modern Google Fonts.
+
+---
+
+## ⚙️ Technologies Used
+
+- **Backend**: Django (Python)
+- **Frontend**: HTML, CSS, JavaScript
+- **Database**: SQLite
+- **Auth**: Django's `AbstractUser` extended with custom fields
+- **PDF Generation** (optional): `xhtml2pdf` (if needed)
+
+---
+
+## 🧾 Object-Oriented Features Implemented
+
+- ✅ Inheritance (e.g., `CustomUser` from `AbstractUser`)
+- ✅ Composition (e.g., `Rental` has `User` and `Car`)
+- ✅ Abstract Class (e.g., `TimeStampedModel`)
+- ✅ Method Overriding (`save()` in `Rental`)
+- ✅ Exception Handling (`try-except` blocks in views)
+- ✅ Operator Overloading (can be optionally shown in report)
+
+---
+
+## 🗂️ Project Structure
+
+```
 Car_Rental_System/
 │
-├── main_app/                    ( Django app containing models, views, templates)
-├── Car_Rental_System/     ( Django project settings and URLs )
-├── media/                          
-                ├── car_images/  ( where car images added by the admin on website will be saved)
-├── static/                          
-                ├── styles/         ("style.css" Parent CSS script)
-                ├── images/        (from here, admin can browse car images which will be manually saved here firstly by the admin. )
+├── Car_Rental_System/       # Django project root
+├── main_app/                # Main Django app with models, views, forms, urls
+├── media/                   # Uploaded images (car images)
+├── static/                  # CSS, JavaScript, and other static assets
+├── templates/               # All HTML templates
+│
+├── db.sqlite3               # SQLite database
+├── manage.py                # Django's project runner
+├── requirements.txt         # All Python dependencies
+├── README.md                # You're reading it
+└── .gitignore               # Git ignore rules
+```
 
-├── templates/                    ( Parent HTML template )
-├── .gitignore                      ( Git ignore rules. )
-├── db.sqlite3                      ( SQLite3 database file )
-├── manage.py                      ( Django's CLI utility script )
-├── requirements.txt            ( Project dependencies )
-└── README.txt                  ( Project overview (this file) )
+---
 
+## 🚀 Setup Instructions
 
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/your-username/car-rental-system.git
+   cd car-rental-system
+   ```
 
-=================================
-INTIAL SETUP (First-Time Run)
-=================================
+2. **Create a virtual environment**:
+   ```bash
+   python -m venv venv
+   venv\Scripts\activate  # On Windows
+   ```
 
-Prerequisites:
---------------
-- Python 3.6+ installed.
-- Terminal (Command Prompt for Windows / Terminal for macOS/Linux) or IDE terminal (e.g., VS Code).
+3. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-FOLLOW THESE STEPS IN ORDER AFTER UNZIPPING THE PROJECT:
-=====================================================================
+4. **Apply migrations**:
+   ```bash
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
 
-1. Open a Terminal:
--------------------
-- For Windows: Press `Win + R`, type `cmd`, and hit Enter (or use IDE terminal).
-- For macOS/Linux: Open "Terminal" (or use IDE terminal).
-- Run this command in the opened terminal to navigate to the project folder (where `manage.py` is located):
-cd "your_path/to/unzipped_project_folder"
+5. **Create a superuser**:
+   ```bash
+   python manage.py createsuperuser
+   ```
 
+6. **Run the development server**:
+   ```bash
+   python manage.py runserver
+   ```
 
-2. Create a Virtual Environment:
---------------------------------
-- Run this command in the opened terminal:
-- For Windows:
-  
-  python -m venv venv
-  
-- For macOS/Linux:
-  
-  python3 -m venv venv
-  
-(This creates a `venv` folder in your project's folder where you navigated in the first step above.)
+7. **Visit the site**:
+   ```
+   http://127.0.0.1:8000/
+   ```
 
-3. Activate the Virtual Environment:
------------------------------------
+---
 
-Run this command in the opened terminal :
-- For Windows:
-venv\Scripts\activate
--For macOS/Linux:
-source venv/bin/activate
+## 🧪 Test Cases & Notes
 
-Now, you’ll see `(venv)` in the terminal prompt once activated.
+- ✅ Form validation (e.g., rental duration > 0, numeric inputs)
+- ✅ Access control based on user roles
+- ✅ Transaction log after each rental/payment
+- ✅ "Return Now" works only for active rentals
+- ✅ Rental history shows "Returned Early" status if returned before `end_date`
+- ✅ Cars become available after expiration via `check_returns()` logic
 
-4. Install Dependencies:
------------------------
-- Run this in the "activated venv terminal":
-pip install -r requirements.txt
-(This installs Django and other packages listed in `requirements.txt`.)
-
-5. Set Up the Database:
-----------------------
-- Run these commands **in order** in the same opened terminal (where venv is now activated):
-python manage.py makemigrations
-python manage.py migrate
-
-(This creates the database tables.)
-
-6. Creating superuser :
--------------------------------------
-- To access the admin interface, firstly, you'll need to create a superuser by running this command in the same opened terminal:
-python manage.py createsuperuser
-Then, follow the prompts to set a username/email/password for the admin.
-
-7. Run the Development Server:
------------------------------
-- Start the server with:
-python manage.py runserver
-Output will show:
-Starting development server at http://127.0.0.1:8000/
+---
 
 
-8. Access the Project:
----------------------
-- Holding the "Ctrl" key, click on `http://127.0.0.1:8000/` in the terminal 
-OR
--Open a browser and go to `http://127.0.0.1:8000/`
-The web interface will get opened where initially you'll be an unauthenticated user.
-On the opened web interface, you can login as admin by giving your admin's credentials as well as sign in as a normal user. 
+## 👨‍💻 Author
 
+- Developed and maintained as an **open source showcase project**.
+- Built with ❤️ using Django and clean frontend design.
 
-9. Stop the Server:
-------------------
-- Press `Ctrl + C` in the terminal where the server is running.
+---
 
-10. Deactivate Virtual Environment (When Done):
----------------------------------------------
-- Type this in the terminal:
-deactivate
-(The `(venv)` prefix will disappear.)
+## 📸 Optional Screenshots
 
-Troubleshooting:
-----------------
-- If `pip` fails, ensure the terminal is in the project folder and `venv` is activated.
-- If migrations fail, delete `db.sqlite3` (if any) and re-run `makemigrations` + `migrate`.
+- Rental History Page  
+- Car Detail with live cost calculation  
+- Transaction History  
+- Admin Dashboard  
+- Contact Form  
 
+(Add images as needed to `/static/screenshots/`)
 
-===========================================================================
-STEPS FOR RE-RUNNING THE PROJECT AFTER CLOSING THE TERMINAL :
-===========================================================================
+---
 
-Once the project is set up (virtual environment created, dependencies installed, etc.), follow these steps to restart it:
+## 📃 License
 
-1.Open a terminal and navigate to the project folder.
-2.In the same opened terminal, activate the virtual environment created while setting up the project.
-3.Start the server by running this command:
-python manage.py runserver
-Access the app at http://127.0.0.1:8000/.
-
-You don’t need to re-run pip install or migrations unless you’ve made changes to the project.
-To stop the server, press Ctrl + C. To exit the virtual environment, type deactivate.
-
-
-
-NOTE ON FILE NAMING:
-=========================
-
-- The `venv/` folder and `.git/` folder were intentionally removed before submission to reduce file size and follow best practices.
-- The Python files inside this Django project (e.g., `views.py`, `models.py`, `urls.py`) follow Django's standard naming conventions and have not been renamed according to the naming conventions shared in the Google classroom. 
--This is intentional since renaming Django’s default script names will disrupt the framework's internal linking and break project functionality.
--Hence, we have followed Django’s professional standards while maintaining functionality and clarity.
-
-
-Submitted by :  HUZAIFA AHMED (CS-24091) AND WASI MUZAMMIL (CS-24093) FROM G-3 GROUP.
-Course: Object-Oriented Programming  
-Batch: 2024
-Semester: Spring 2025
+This project is open source and free to use for learning and showcasing purposes. Contributions are welcome.
