@@ -51,7 +51,7 @@ Car_Rental_System/
 ├── Car_Rental_System/       # Django project root
 ├── main_app/                # Main Django app with models, views, forms, urls
 ├── media/                   # Uploaded images (car images)
-├── static/                  # Static assets like CSS, images to be uploaded to the website by the admin
+├── static/                  # Static assets like screenshots, CSS, images to be uploaded to the website by the admin
 ├── templates/               # All HTML templates
 │
 ├── db.sqlite3               # SQLite database
@@ -102,6 +102,20 @@ Car_Rental_System/
    ```
    http://127.0.0.1:8000/
    ```
+
+---
+## 📸 Screenshots
+### 🔹Landing Page Preview For Authenticated Users 
+<img src="static\screenshots\logged in user's home page.png" width="800" height="680">
+
+### 🔹Admin Dashboard Preview  
+<img src="static\screenshots\admin dash.png" width="800" >
+
+### 🔹Rental History Preview 
+<img src="static\screenshots\user rental history.png" width="800" >
+
+### 🔹 User Profile Preview  
+<img src="static\screenshots\user profile page.png" width="800" >
 
 ---
 
