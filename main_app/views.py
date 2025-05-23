@@ -66,7 +66,7 @@ def home_view(request):
     
     cars = Car.objects.all()
     # Paginator--A Django helper class for splitting data into pages.
-    paginator = Paginator(cars, 9)  # 9 cars per page
+    paginator = Paginator(cars, 6)  # 9 cars per page
     page_obj = paginator.get_page(1)
     
     context = {
@@ -79,7 +79,7 @@ def home_view(request):
 def car_list_view(request, page=1):
     """View for paginated car listings"""
     cars = Car.objects.all()
-    paginator = Paginator(cars, 9)  # 9 cars per page (except last page might have 8)
+    paginator = Paginator(cars, 6)  # 9 cars per page (except last page might have 8)
     page_obj = paginator.get_page(page)
     
     context = {
