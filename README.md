@@ -115,7 +115,7 @@ Car_Rental_System/
 <p align="center">
    🔹Landing Page For Authenticated Users  
 </p>
-<img src="static\screenshots\logged in user's home page.png" height=290px width=500px >
+<img src="static\screenshots\logged in user's home page.png" height=290px width=550px >
 </td> 
 <td width="50%">
 <br>
